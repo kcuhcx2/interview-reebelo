@@ -3,6 +3,7 @@ import Modal from "@/components/Modal";
 import { OrdersContext } from "@/context/ordersContext";
 import Image from "next/image";
 import { useContext, useState } from "react";
+import { v4 } from 'uuid';
 
 type ProductType = {
     id: number;
@@ -59,12 +60,20 @@ export default function OrdersPage(){
         setOpen(true);
     }
 
-    const handlePruchaseConfirm = () => {
+    const handlePruchaseConfirm = async () => {
         setOpen(false);
         // Do fetch request here
         // Lets assume the request was successful
+        await fetch('/api/orders', {
+            method: 'POST',
+            body: JSON.stringify(selectedProduct),
+            headers: {
+                'Content-Type': 'application/json',
+                'x-idempotency-key': v4(), // This is a unique key that we can use to ensure that the request is idempotent
+            }
+        });
         console.log('selectedProduct is -> ', selectedProduct);
-        // Sotre the order locally raether than refetching the order constantly
+        // Store the order locally raether than refetching the order constantly
         setOrders([...orders, selectedProduct])
         setSelectedProduct(null);
     }
