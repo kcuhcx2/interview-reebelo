@@ -1,0 +1,69 @@
+openapi: 3.0.3
+info:
+  title: customer-api
+  description: BFF for customer to interact with orders
+  version: 1.0.0
+servers:
+  - url: 'https://localhost:3000/dev'
+    description: Local server
+components:
+  schemas:
+    OrderPayload:
+      type: object
+      required:
+        - productId
+        - quantity
+      properties:
+        productId:
+          type: string
+          format: uuid
+        quantity:
+          type: number
+    OrderResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+    ValidationError:
+      type: object
+      properties:
+        message:
+          type: string
+        error:
+          type: boolean
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        error:
+          type: boolean
+paths:
+  /api/orders:
+    post:
+      description: Create Order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderPayload'
+      responses:
+        '200':
+          description: Successfully created order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+  

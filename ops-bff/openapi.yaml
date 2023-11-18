@@ -1,0 +1,202 @@
+openapi: 3.0.3
+info:
+  title: ops-api
+  description: BFF for operation to interact with orders and products
+  version: 1.0.0
+servers:
+  - url: 'https://localhost:8080'
+    description: Local server
+components:
+  schemas:
+    UpdateProductPayload:
+      type: object
+      required:
+        - productId
+        - quantity
+        - price
+      properties:
+        productId:
+          type: string
+          format: uuid
+        quantity:
+          type: number
+        price:
+          type: number
+    CreateProductPayload:
+      type: object
+      required:
+        - quantity
+        - price
+      properties:
+        quantity:
+          type: number
+        price:
+          type: number
+    ProductResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+    ValidationError:
+      type: object
+      properties:
+        message:
+          type: string
+        error:
+          type: boolean
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        error:
+          type: boolean
+    UpdateOrderStatusRequest:
+      type: object
+      required:
+        - status
+        - orderId
+      properties:
+        orderId:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+            - 'PROCESSING'
+            - 'CANCELLED'
+            - 'DELIVERED'
+    UpdateOrderStatusResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+    UpdateOrderShippingResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+    UpdateOrderShippingRequest:
+        type: object
+        required:
+          - orderId
+        properties:
+          orderId:
+            type: string
+            format: uuid
+          tracking:
+            type: object
+            properties:
+              companyId:
+                type: string
+                format: uuid
+              number:
+                type: string
+paths:
+  /api/product:
+    post:
+      description: Create Product
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProductPayload'
+      responses:
+        '200':
+          description: Successfully created product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      description: Update Product
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProductPayload'
+      responses:
+        '200':
+          description: Successfully updated product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/order/status:
+    patch:
+      description: Update Order Status
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOrderStatusRequest'
+      responses:
+        '200':
+          description: Successfully updated order status
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/UpdateOrderStatusResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/order/shipping:
+    patch:
+      description: Update Order Shipping Info e.g. tracking
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOrderShippingRequest'
+      responses:
+        '200':
+          description: Successfully updated order tracking
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateOrderShippingResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'

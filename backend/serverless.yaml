@@ -1,0 +1,65 @@
+service:
+  name: account-management-service
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+
+functions:
+  createProductsHandler:
+    handler: dist/src/handlers/index.createProductsHandler
+    events:
+      - http:
+          path: /products
+          method: post
+  updateProductsHandler:
+    handler: dist/src/handlers/index.updateProductsHandler
+    events:
+      - http:
+          path: /products
+          method: patch
+  updateOrderStatusHandler:
+    handler: dist/src/handlers/index.updateOrderStatusHandler
+    events:
+      - http:
+          path: /orders/status
+          method: patch
+  updateOrderShippingHandler:
+    handler: dist/src/handlers/index.updateOrderShippingHandler
+    events:
+      - http:
+          path: /orders/shipping
+          method: patch
+  createOrderHandler:
+    handler: dist/src/handlers/index.createOrderHandler
+    events:
+      - http:
+          path: /orders
+          method: post
+
+resources:
+  Resources:
+  ProductsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: Products
+      AttributeDefinitions:
+        - AttributeName: productId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: productId
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+
+  OrdersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: Orders
+      AttributeDefinitions:
+        - AttributeName: orderId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: orderId
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST

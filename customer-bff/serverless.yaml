@@ -1,0 +1,22 @@
+service: customer-bff
+
+plugins:
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  timeout: 20
+  endpointType: REGIONAL
+  apiGateway:
+    description: BFF for customer to interact with orders
+    # Ideally would use the sls custom domain package to create a custom domain to keep it static
+
+functions:
+  createOrder:
+    handler: dist/src/handlers/orders.createOrderHandler
+    events:
+      - http:
+          path: /api/orders
+          method: post
+          cors: true
