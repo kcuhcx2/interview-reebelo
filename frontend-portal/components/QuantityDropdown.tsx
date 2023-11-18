@@ -17,7 +17,7 @@ export function QuantityDropdown(props: QuantityDropdownProps) {
     const [selected, setSelected] = useState(productsList[0])
 
     return (
-    <div className={'flex flex-col w-full'}>
+    <div className={'flex flex-col w-full space-y-3'}>
         <Listbox value={selected} onChange={setSelected}>
             {({ open }) => (
             <>
