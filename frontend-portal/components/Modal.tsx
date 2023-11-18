@@ -64,7 +64,7 @@ export default function Modal(props: ModalProps) {
                       </Dialog.Title>
                       <div className="mt-2">
                         <p className="text-sm text-gray-500">
-                          We can't wait for you to get this product! Click Purchase to order now.
+                          We cant wait for you to get this product! Click Purchase to order now.
                         </p>
                       </div>
                     </div>

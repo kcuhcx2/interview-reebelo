@@ -41,7 +41,7 @@ export function HomePage() {
                 <div>
                   <div>
                     <h1 className="text-4xl font-bold tracking-tight sm:text-center sm:text-6xl">
-                      Let's get started
+                      Lets get started
                     </h1>
                     <p className="mt-6 text-lg leading-8 text-gray-600 sm:text-center">
                       Go to the Ops-Portal or Orders page to get started
