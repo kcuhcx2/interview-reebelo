@@ -6,16 +6,16 @@
 
 ### High level
 - **We have 4 parts to this repo**
-1. `frontend` - React / Nextjs app
-2. `customer-bff` - Nodejs app that acts as a BFF (Backend for Frontend) for the customer (frontend) app
-3. `ops-bff` - Nodejs app that acts as a BFF (Backend for Frontend) for the operations side
+1. `frontend-portal` - React / Nextjs app
+2. `customer-bff` - Nodejs app that acts as a BFF (Backend for Frontend-portal) for the customer (frontend-portal) app
+3. `ops-bff` - Nodejs app that acts as a BFF (Backend for Frontend-portal) for the operations side
 4. `backend` - Nodejs app that acts as the source of truth for the data
 
 ### Flow
 To visualise the flow it goes such as:
 ```
-frontend => customer-bff => backend
-frontend => ops-bff => backend
+frontend-portal => customer-bff => backend
+frontend-portal => ops-bff => backend
 ```
 
 ### BFF-Apis
@@ -60,12 +60,12 @@ If I had more time there are a few things I would look into and/or possibly chan
 - To save/get information like products we currently have to go back into the backend. A potential change would be we have materialised views or some sort of caching on the BFF side. We could have a dynamodb table as a materialised view, or use something like Redis to quickly retrieve these products. The added complexity would be ensuring the products are up to date with the source of truth.
 - This could also mean implementing PostgreSQL as the source of truth in the backend
 - I would implement functional testing to see how all the seperate services can call each other.
-- I would also implement unit testing using things like jest and for the frontend React Testing Library
+- I would also implement unit testing using things like jest and for the frontend-portal React Testing Library
 - In terms of lambdas we could look at setting up things like `provisionedConcurrency` to help minimise cold-starts.
 - In the [backend notify-ops service](/backend/src/service/opsService.ts) I mentioned it might be worth to have an asynchronous flow such as setting up a global event bridge and use domain events to have a seperate service to aggregate this information such as snowflake for business decisions! To extend onto this we could look at having a CQRS pattern to keep track of all events and updates within our system.
 - Lastly, I was thinking of having the ops-bff send off our events such as updating products to an SQS queue as a lot of this could be done asynchronously. This can help with fault tolerance, retry logic and works well with event-driven architecture.
 
-### Frontend
-- If time permitted implement unit testing using things like jest and for the frontend React Testing Library
+### Frontend-portal
+- If time permitted implement unit testing using things like jest and for the frontend-portal React Testing Library
 - I would have explored using Redux Tool Kit for storing state. Personally I like the verboseness of it.
 - Implemented the ops-portal.
